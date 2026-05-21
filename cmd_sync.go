@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"time"
 
-	"lidlsearch/internal/config"
-	"lidlsearch/internal/lidl"
+	"github.com/sodre90/lidl-plus-search/internal/config"
+	"github.com/sodre90/lidl-plus-search/internal/lidl"
 )
 
 func cmdSync(ctx context.Context, args []string) error {

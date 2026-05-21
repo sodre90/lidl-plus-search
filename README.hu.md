@@ -45,11 +45,15 @@ Mindent **helyben** tárol (egy SQLite adatbázisban a konfigurációs könyvtá
 go build -o lidlsearch .
 ```
 
-Opcionálisan telepítheted a `PATH`-odra:
+Vagy telepítsd a legfrissebbet egyenesen a GitHubról:
 
 ```sh
-go install .   # a `lidlsearch` ide kerül: $(go env GOPATH)/bin
+go install github.com/sodre90/lidl-plus-search@latest
 ```
+
+> A `go install` a binárist `lidl-plus-search` néven hozza létre (a repo neve
+> alapján). A lenti példák a rövidebb `lidlsearch`-öt használják; vagy csinálj rá
+> aliast, vagy fordítsd helyben: `go build -o lidlsearch .`.
 
 ## Használat
 

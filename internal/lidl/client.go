@@ -11,8 +11,8 @@ import (
 	"sync"
 	"time"
 
-	"lidlsearch/internal/auth"
-	"lidlsearch/internal/config"
+	"github.com/sodre90/lidl-plus-search/internal/auth"
+	"github.com/sodre90/lidl-plus-search/internal/config"
 )
 
 const ticketsHost = "https://tickets.lidlplus.com/api"

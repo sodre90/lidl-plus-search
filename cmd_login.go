@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"lidlsearch/internal/auth"
-	"lidlsearch/internal/config"
+	"github.com/sodre90/lidl-plus-search/internal/auth"
+	"github.com/sodre90/lidl-plus-search/internal/config"
 )
 
 func cmdLogin(ctx context.Context, _ []string) error {

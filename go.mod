@@ -1,4 +1,4 @@
-module lidlsearch
+module github.com/sodre90/lidl-plus-search
 
 go 1.26
 

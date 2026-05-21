@@ -7,7 +7,7 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	"lidlsearch/internal/store"
+	"github.com/sodre90/lidl-plus-search/internal/store"
 )
 
 func cmdSearch(args []string) error {

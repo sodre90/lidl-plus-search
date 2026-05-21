@@ -44,11 +44,15 @@ talks directly to the Lidl Plus backend; nothing is sent anywhere else.
 go build -o lidlsearch .
 ```
 
-Optionally install it on your `PATH`:
+Or install the latest straight from GitHub:
 
 ```sh
-go install .   # puts `lidlsearch` in $(go env GOPATH)/bin
+go install github.com/sodre90/lidl-plus-search@latest
 ```
+
+> `go install` names the binary `lidl-plus-search` (after the repo). The examples
+> below use the shorter `lidlsearch`; either alias it, or build locally with
+> `go build -o lidlsearch .`.
 
 ## Usage
 

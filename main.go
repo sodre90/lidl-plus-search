@@ -16,8 +16,8 @@ import (
 	"os"
 	"os/signal"
 
-	"lidlsearch/internal/config"
-	"lidlsearch/internal/store"
+	"github.com/sodre90/lidl-plus-search/internal/config"
+	"github.com/sodre90/lidl-plus-search/internal/store"
 )
 
 func main() {
