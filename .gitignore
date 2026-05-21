@@ -1,0 +1,9 @@
+# Compiled binary
+/lidlsearch
+
+# Local data / scratch
+*.db
+*.db-journal
+
+# Claude Code local settings (machine-specific)
+.claude/settings.local.json
