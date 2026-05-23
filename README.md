@@ -31,6 +31,8 @@ talks directly to the Lidl Plus backend; nothing is sent anywhere else.
    into searchable rows. The full raw JSON of every receipt is also kept. A live
    progress bar is shown in a terminal (and plain log lines when piped).
 3. **`search` / `list` / `show`** query the local database — fast and offline.
+4. **`web`** starts a small local server and opens a browser with a point-and-click
+   UI (live search, filters, a price-over-time chart, and clickable receipts).
 
 ## Requirements
 
@@ -75,9 +77,41 @@ go install github.com/sodre90/lidl-plus-search@latest
 ./lidlsearch list                  # recent receipts
 ./lidlsearch show <receipt-id>     # items on one receipt
 ./lidlsearch raw <receipt-id>      # raw JSON (for debugging)
+
+# Or use the web UI
+./lidlsearch web                   # opens http://127.0.0.1:8787 in your browser
+./lidlsearch web --addr :9000      # listen on a different port
+./lidlsearch web --no-open         # don't auto-open a browser
 ```
 
 Search is **accent- and case-insensitive** (e.g. `kenyer` matches `Kenyér`).
+
+## Web UI
+
+`lidlsearch web` serves a small single-page app from the binary itself (nothing
+is fetched from the internet) and opens it in your browser. On load it shows a
+**spending-by-month** chart and your recent receipts; type in the search box for
+live, accent-insensitive results
+with date/price filters, interactive charts (unit price over time and spend per
+month, with hover tooltips), and a summary of how much you spent. Click any row
+to see the full receipt. The **Sync** button in the header
+downloads new receipts (the same incremental sync as the CLI) with live progress,
+then refreshes the view. Press Ctrl+C in the terminal to stop the server.
+
+The UI is a React + TypeScript app (built with Vite) whose compiled output is
+committed under `internal/web/assets` and embedded via `go:embed`, so plain
+`go build` / `go install` produce a self-contained binary — **Node is only needed
+to change the UI**, not to run it. To rebuild it after editing the frontend:
+
+```sh
+cd frontend
+npm install      # first time only
+npm run build    # writes the compiled UI into ../internal/web/assets
+```
+
+For frontend development with hot reload, run the Go server (`./lidlsearch web`)
+and, in another terminal, `npm run dev` inside `frontend/` — Vite proxies `/api`
+calls to the Go server on port 8787.
 
 ## Configuration
 
@@ -121,9 +155,12 @@ LIDL_COUNTRY=DE LIDL_LANGUAGE=de-DE ./lidlsearch sync
 
 ```
 main.go            CLI entry + command dispatch
-cmd_*.go           command implementations (login, sync, search/list/show/raw)
+cmd_*.go           command implementations (login, sync, search/list/show/raw, web)
+cmd_web.go         local web server + JSON API (reuses internal/store)
 internal/config    config dir, token + database paths, country/language
 internal/auth      OAuth2 PKCE flow + chromedp browser login
 internal/lidl      authenticated receipts API client
 internal/store     SQLite storage, parsing, accent-insensitive search
+internal/web       embedded web UI assets (built from frontend/)
+frontend/          React + TypeScript UI source (Vite); builds into internal/web/assets
 ```
