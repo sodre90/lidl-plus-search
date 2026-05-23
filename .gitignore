@@ -6,5 +6,11 @@
 *.db
 *.db-journal
 
+# Frontend (source lives in frontend/; the *built* UI in internal/web/assets is
+# committed so `go install`/`go build` work without Node)
+/frontend/node_modules
+/frontend/.vite
+/frontend/*.tsbuildinfo
+
 # Claude Code local settings (machine-specific)
 .claude/settings.local.json

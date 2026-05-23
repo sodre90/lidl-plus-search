@@ -8,6 +8,7 @@
 //	list               list recent receipts
 //	show <id>          show one receipt's items
 //	raw <id>           print one receipt's raw JSON (debug)
+//	web                browse and search in a local web UI
 package main
 
 import (
@@ -44,6 +45,8 @@ func main() {
 		err = cmdShow(args)
 	case "raw":
 		err = cmdRaw(args)
+	case "web":
+		err = cmdWeb(ctx, args)
 	case "help", "-h", "--help":
 		usage()
 	default:
@@ -76,6 +79,9 @@ Usage:
   lidlsearch list [--limit N]   recent receipts
   lidlsearch show <id>          one receipt's items
   lidlsearch raw <id>           one receipt's raw JSON
+  lidlsearch web                browse/search in a local web UI
+       --addr host:port         listen address (default 127.0.0.1:8787)
+       --no-open                don't open a browser automatically
 
 Override country/language with the LIDL_COUNTRY and LIDL_LANGUAGE env vars.
 `)

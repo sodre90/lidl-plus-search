@@ -134,6 +134,45 @@ func (db *DB) ReceiptItems(id string) ([]SearchResult, error) {
 	return db.queryResults(q, id)
 }
 
+// MonthTotal is the total spend (and receipt count) for one calendar month.
+type MonthTotal struct {
+	Month string // "YYYY-MM"
+	Total float64
+	Count int
+}
+
+// MonthlyTotals returns total spend per month across all receipts (oldest
+// month first), plus the currency to display.
+func (db *DB) MonthlyTotals() ([]MonthTotal, string, error) {
+	rows, err := db.sql.Query(`
+        SELECT substr(date, 1, 7) AS month, COALESCE(SUM(total_amount), 0), COUNT(*)
+        FROM receipts WHERE date <> ''
+        GROUP BY month ORDER BY month`)
+	if err != nil {
+		return nil, "", err
+	}
+	defer rows.Close()
+
+	var out []MonthTotal
+	for rows.Next() {
+		var m MonthTotal
+		if err := rows.Scan(&m.Month, &m.Total, &m.Count); err != nil {
+			return nil, "", err
+		}
+		out = append(out, m)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, "", err
+	}
+
+	var cur sql.NullString
+	err = db.sql.QueryRow(`SELECT currency FROM receipts WHERE currency <> '' ORDER BY date DESC LIMIT 1`).Scan(&cur)
+	if err != nil && err != sql.ErrNoRows {
+		return nil, "", err
+	}
+	return out, cur.String, nil
+}
+
 // Count returns the number of receipts and items stored.
 func (db *DB) Count() (receipts, items int, err error) {
 	if err = db.sql.QueryRow("SELECT COUNT(*) FROM receipts").Scan(&receipts); err != nil {
