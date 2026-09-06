@@ -54,8 +54,95 @@ jobs:
           name: dist-${{ matrix.goos }}-${{ matrix.goarch }}
           path: dist/*
 
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: android-actions/setup-android@v3
+
+      - name: Check signing secrets
+        env:
+          KEYSTORE: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          # Without these the signing plugin silently falls back to the debug
+          # keystore, which would publish an APK nobody can upgrade later.
+          if [ -z "$KEYSTORE" ]; then
+            echo "ANDROID_KEYSTORE_BASE64 is not set; see mobile/README.md." >&2
+            exit 1
+          fi
+
+      - name: Install dependencies
+        working-directory: mobile
+        run: npm ci
+
+      - name: Derive the Android version code from the tag
+        run: |
+          set -eu
+          # v1.2.3 -> 10203, so the code rises monotonically with the tag.
+          v="${GITHUB_REF_NAME#v}"
+          major="${v%%.*}"; rest="${v#*.}"
+          minor="${rest%%.*}"; patch="${rest#*.}"
+          patch="${patch%%[-+]*}"
+          echo "ANDROID_VERSION_CODE=$((major * 10000 + minor * 100 + patch))" >> "$GITHUB_ENV"
+          echo "APP_VERSION=$v" >> "$GITHUB_ENV"
+
+      - name: Generate the native project
+        working-directory: mobile
+        run: npx expo prebuild --platform android --no-install
+
+      - name: Restore the keystore
+        run: |
+          set -eu
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > "$RUNNER_TEMP/release.keystore"
+
+      - name: Build the signed APK
+        working-directory: mobile/android
+        run: |
+          # x86 ABIs only serve emulators and cost ~44 MB in the APK.
+          ./gradlew assembleRelease --no-daemon \
+            -PreactNativeArchitectures=armeabi-v7a,arm64-v8a \
+            -PLIDL_UPLOAD_STORE_FILE="$RUNNER_TEMP/release.keystore" \
+            -PLIDL_UPLOAD_STORE_PASSWORD="${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" \
+            -PLIDL_UPLOAD_KEY_ALIAS="${{ secrets.ANDROID_KEY_ALIAS }}" \
+            -PLIDL_UPLOAD_KEY_PASSWORD="${{ secrets.ANDROID_KEY_PASSWORD }}"
+
+      - name: Verify the APK is release-signed
+        run: |
+          set -eu
+          apk=mobile/android/app/build/outputs/apk/release/app-release.apk
+          build_tools="$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)"
+          "$build_tools/apksigner" verify --print-certs "$apk"
+          # The Expo template's fallback debug key must never reach a release.
+          if "$build_tools/apksigner" verify --print-certs "$apk" | grep -q "CN=Android Debug"; then
+            echo "APK was signed with the debug keystore; check the signing secrets." >&2
+            exit 1
+          fi
+          mkdir -p dist
+          cp "$apk" "dist/lidl-receipts_${GITHUB_REF_NAME}_android.apk"
+
+      - name: Remove the keystore
+        if: always()
+        run: rm -f "$RUNNER_TEMP/release.keystore"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-android
+          path: dist/*
+
   release:
-    needs: build
+    needs: [build, android]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
@@ -67,7 +154,7 @@ jobs:
         run: |
           cd dist
           shopt -s nullglob
-          sha256sum *.tar.gz *.zip > checksums.txt
+          sha256sum *.tar.gz *.zip *.apk > checksums.txt
           cat checksums.txt
 
       - uses: softprops/action-gh-release@v2
