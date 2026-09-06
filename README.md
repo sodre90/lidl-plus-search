@@ -34,6 +34,21 @@ talks directly to the Lidl Plus backend; nothing is sent anywhere else.
 4. **`web`** starts a small local server and opens a browser with a point-and-click
    UI (live search, filters, a price-over-time chart, and clickable receipts).
 
+## Mobile app
+
+There is also a standalone **Android + iOS** app (Expo / React Native) in
+[`mobile/`](mobile/) that does everything on the device — login, sync, browse,
+search, and spending charts — with no server. It ports the same login, parser,
+and search logic used here.
+
+**Android:** download the `.apk` from the
+[latest release](https://github.com/sodre90/lidl-plus-search/releases/latest)
+and open it on your phone (Android will ask you to allow installs from your
+browser). It is signed but not distributed through Play, so you will see the
+usual "unknown app" warning.
+
+Build instructions and the iOS story are in [mobile/README.md](mobile/README.md).
+
 ## Requirements
 
 - **Go** 1.22+ (to build) — `go build` will auto-fetch a newer toolchain if a

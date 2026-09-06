@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# Native build output (managed workflow regenerates these)
+/ios
+/android
+
+# Metro
+.metro-health-check*
+
+# Misc
+*.log
+.DS_Store
+npm-debug.*
+yarn-error.*
+
+# Local env
+.env*.local
+
+# Generated typed routes
+.expo/types/

@@ -35,6 +35,22 @@ Mindent **helyben** tárol (egy SQLite adatbázisban a konfigurációs könyvtá
 4. **`web`** elindít egy kis helyi szervert, és böngészőben megnyit egy kattintható
    felületet (élő keresés, szűrők, ár-idő grafikon, kattintható blokkok).
 
+## Mobilalkalmazás
+
+A [`mobile/`](mobile/) mappában van egy önálló **Android + iOS** alkalmazás is
+(Expo / React Native), amely mindent a készüléken végez — belépés, szinkron,
+böngészés, keresés és költséggrafikonok —, szerver nélkül. Ugyanazt a belépési,
+elemző és kereső logikát portolja, mint ez az eszköz.
+
+**Android:** töltsd le az `.apk` fájlt a
+[legfrissebb kiadásból](https://github.com/sodre90/lidl-plus-search/releases/latest),
+és nyisd meg a telefonodon (az Android engedélyt fog kérni a böngészőből való
+telepítéshez). Alá van írva, de nem a Play áruházból jön, ezért a szokásos
+„ismeretlen alkalmazás" figyelmeztetés megjelenik.
+
+A fordítási tudnivalók és az iOS rész a [mobile/README.md](mobile/README.md)
+fájlban vannak.
+
 ## Követelmények
 
 - **Go** 1.22+ (a fordításhoz) — a `go build` automatikusan letölt egy újabb
