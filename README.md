@@ -41,9 +41,10 @@ that does everything on the device — login, sync, browse, search, and spending
 charts — with no server. It ports the same login, parser, and search logic used
 here.
 
-**Android only, in practice.** The codebase is cross-platform, but it has only
-ever been built and tested on Android; **iOS has never been run even once**, so
-whether it works there is unknown.
+**Android is the shipping platform.** It has only ever been run on a real
+device on Android; iOS works (verified on the simulator in September 2026) but
+there are no iOS releases — building it yourself is in
+[mobile/README.md](mobile/README.md).
 
 **Android:** download the `.apk` from the
 [latest release](https://github.com/sodre90/lidl-plus-search/releases/latest)

@@ -10,10 +10,10 @@ backend and stores everything in local SQLite, mirroring the logic of the
 > mobile app's login and endpoints (reverse-engineered by the community) and is
 > intended for accessing **your own** account data only. Not affiliated with Lidl.
 
-> ℹ️ **Android only, in practice.** Everything below has been developed and
-> tested on Android. The codebase is cross-platform and nothing in it is
-> Android-specific by design, but **iOS has never been built or run even once** —
-> whether it works is simply unknown. Treat iOS as unverified, not as supported.
+> ℹ️ **Android is the shipping platform.** iOS was verified on the iPhone 16 Pro
+> simulator (iOS 18.6) in September 2026 — login, sync, search and the charts
+> work there — but that is the extent of it: no device testing, no iOS release
+> artefacts, and CI builds the Android APK only.
 
 ## Features
 
@@ -119,17 +119,22 @@ which regenerate `android/` from scratch.
 
 ### iOS
 
-**Never tested.** No iOS build has ever been produced or run, on a simulator or
-a device, so there is no evidence either way that the app works there. The
-plausible trouble spots — none of them investigated — are the in-WebView
-interception of the `com.lidlplus.app://callback` redirect, the natively
-embedded icon font, and `expo-secure-store` / `expo-sqlite` behaviour under the
-New Architecture.
+Verified on the iPhone 16 Pro simulator (iOS 18.6, Xcode 16.4) in September
+2026: a `--configuration Release` build starts, signs in through the WebView,
+and syncs — the previously-suspect spots (in-WebView interception of the
+`com.lidlplus.app://callback` redirect, the natively embedded icon font,
+`expo-secure-store` / `expo-sqlite` under the New Architecture) all behaved.
 
-`eas.json` still carries `development`/`preview`/`production` profiles for
-`npx eas build`; iOS distribution needs an Apple Developer account and is not
-wired into CI. Anyone with a Mac and an Apple Developer account can start with
-`npx expo run:ios` — expect to fix things.
+```sh
+xcrun simctl create "Lidl Test" com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro \
+  com.apple.CoreSimulator.SimRuntime.iOS-18-6
+npx expo run:ios --device "Lidl Test" --configuration Release
+```
+
+Simulator-only though: never run on a real device, and nothing iOS ships.
+`eas.json` carries `development`/`preview`/`production` profiles for
+`npx eas build`, but iOS distribution needs a paid Apple Developer account and
+is not wired into CI.
 
 ## Settings & data
 

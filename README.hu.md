@@ -42,9 +42,10 @@ Native), amely mindent a készüléken végez — belépés, szinkron, böngész
 keresés és költséggrafikonok —, szerver nélkül. Ugyanazt a belépési, elemző és
 kereső logikát portolja, mint ez az eszköz.
 
-**A gyakorlatban csak Android.** A kód platformfüggetlen, de eddig kizárólag
-Androidon készült és lett tesztelve; **iOS-en még egyetlen alkalommal sem
-futott**, így nem tudni, hogy működik-e ott.
+**A forgalmazott platform az Android.** Valódi eszközon eddig csak Androidon
+futott; iOS-en működik (szimulátoron tesztelve 2026 szeptemberében), de iOS
+kiadás nincs — a saját fordítás leírása a [mobile/README.md](mobile/README.md)
+fájlban van.
 
 **Android:** töltsd le az `.apk` fájlt a
 [legfrissebb kiadásból](https://github.com/sodre90/lidl-plus-search/releases/latest),
