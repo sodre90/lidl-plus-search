@@ -7,7 +7,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   name: "Lidl Receipts",
   slug: "lidl-receipts",
   scheme: "lidlreceipts",
-  version: "0.3.1",
+  version: "0.3.2",
   orientation: "portrait",
   userInterfaceStyle: "automatic",
   newArchEnabled: true,
@@ -51,7 +51,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     "expo-router",
     "expo-secure-store",
     "expo-sqlite",
-    "expo-font",
+    // Embed the icon font natively so it is available the instant the UI mounts:
+    // the runtime loader (expo-font's loadAsync) hangs in release builds without
+    // ever resolving or erroring. The file MUST be named "ionicons.ttf" —
+    // @expo/vector-icons renders with fontFamily "ionicons" and Android resolves
+    // that to assets/fonts/<fontFamily>.ttf, case-sensitively.
+    ["expo-font", { fonts: ["./assets/fonts/ionicons.ttf"] }],
     "expo-asset",
     "./plugins/withAndroidRelease",
   ],

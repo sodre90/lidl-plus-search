@@ -4,8 +4,6 @@
 import { useEffect } from "react";
 import { Stack, useRouter, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { useFonts } from "expo-font";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import * as SplashScreen from "expo-splash-screen";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -21,12 +19,12 @@ function RootNavigator() {
   const segments = useSegments();
   const router = useRouter();
   const { colors, dark } = useTheme();
-  // Every icon in the app is an Ionicons glyph. Without preloading the font the
-  // tab bar renders before it resolves and the glyphs come out invisible —
-  // unnoticeable in dev, where Metro serves the font instantly.
-  const [fontsLoaded] = useFonts(Ionicons.font);
-
-  const ready = status !== "loading" && fontsLoaded;
+  // The icon font is embedded natively (see the expo-font plugin in
+  // app.config.ts), so it is ready before the first render and nothing here has
+  // to wait on it. Deliberately no runtime font loading: expo-font's loadAsync
+  // hangs in release builds without ever resolving or erroring, and gating the
+  // UI on it left the app stuck on the splash screen.
+  const ready = status !== "loading";
 
   useEffect(() => {
     if (!ready) return;
