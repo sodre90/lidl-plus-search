@@ -7,7 +7,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   name: "Lidl Receipts",
   slug: "lidl-receipts",
   scheme: "lidlreceipts",
-  version: "0.3.0",
+  version: "0.3.1",
   orientation: "portrait",
   userInterfaceStyle: "automatic",
   newArchEnabled: true,

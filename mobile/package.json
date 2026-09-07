@@ -1,6 +1,6 @@
 {
   "name": "lidl-receipts-mobile",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "description": "Standalone Lidl Plus receipts app (Android + iOS) \u2014 logs in, syncs and searches receipts entirely on the device.",
   "main": "expo-router/entry",
