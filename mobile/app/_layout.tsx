@@ -4,6 +4,8 @@
 import { useEffect } from "react";
 import { Stack, useRouter, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { useFonts } from "expo-font";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import * as SplashScreen from "expo-splash-screen";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -19,9 +21,15 @@ function RootNavigator() {
   const segments = useSegments();
   const router = useRouter();
   const { colors, dark } = useTheme();
+  // Every icon in the app is an Ionicons glyph. Without preloading the font the
+  // tab bar renders before it resolves and the glyphs come out invisible —
+  // unnoticeable in dev, where Metro serves the font instantly.
+  const [fontsLoaded] = useFonts(Ionicons.font);
+
+  const ready = status !== "loading" && fontsLoaded;
 
   useEffect(() => {
-    if (status === "loading") return;
+    if (!ready) return;
     SplashScreen.hideAsync().catch(() => {});
 
     const onLogin = segments[0] === "login";
@@ -30,7 +38,10 @@ function RootNavigator() {
     } else if (status === "signedIn" && onLogin) {
       router.replace("/");
     }
-  }, [status, segments, router]);
+  }, [ready, status, segments, router]);
+
+  // Hold the splash screen rather than flashing a half-drawn, icon-less UI.
+  if (!ready) return null;
 
   return (
     <>
