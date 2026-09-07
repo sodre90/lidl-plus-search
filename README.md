@@ -36,10 +36,14 @@ talks directly to the Lidl Plus backend; nothing is sent anywhere else.
 
 ## Mobile app
 
-There is also a standalone **Android + iOS** app (Expo / React Native) in
-[`mobile/`](mobile/) that does everything on the device — login, sync, browse,
-search, and spending charts — with no server. It ports the same login, parser,
-and search logic used here.
+There is also a standalone app (Expo / React Native) in [`mobile/`](mobile/)
+that does everything on the device — login, sync, browse, search, and spending
+charts — with no server. It ports the same login, parser, and search logic used
+here.
+
+**Android only, in practice.** The codebase is cross-platform, but it has only
+ever been built and tested on Android; **iOS has never been run even once**, so
+whether it works there is unknown.
 
 **Android:** download the `.apk` from the
 [latest release](https://github.com/sodre90/lidl-plus-search/releases/latest)

@@ -37,10 +37,14 @@ Mindent **helyben** tárol (egy SQLite adatbázisban a konfigurációs könyvtá
 
 ## Mobilalkalmazás
 
-A [`mobile/`](mobile/) mappában van egy önálló **Android + iOS** alkalmazás is
-(Expo / React Native), amely mindent a készüléken végez — belépés, szinkron,
-böngészés, keresés és költséggrafikonok —, szerver nélkül. Ugyanazt a belépési,
-elemző és kereső logikát portolja, mint ez az eszköz.
+A [`mobile/`](mobile/) mappában van egy önálló alkalmazás is (Expo / React
+Native), amely mindent a készüléken végez — belépés, szinkron, böngészés,
+keresés és költséggrafikonok —, szerver nélkül. Ugyanazt a belépési, elemző és
+kereső logikát portolja, mint ez az eszköz.
+
+**A gyakorlatban csak Android.** A kód platformfüggetlen, de eddig kizárólag
+Androidon készült és lett tesztelve; **iOS-en még egyetlen alkalommal sem
+futott**, így nem tudni, hogy működik-e ott.
 
 **Android:** töltsd le az `.apk` fájlt a
 [legfrissebb kiadásból](https://github.com/sodre90/lidl-plus-search/releases/latest),

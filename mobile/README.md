@@ -10,6 +10,11 @@ backend and stores everything in local SQLite, mirroring the logic of the
 > mobile app's login and endpoints (reverse-engineered by the community) and is
 > intended for accessing **your own** account data only. Not affiliated with Lidl.
 
+> ℹ️ **Android only, in practice.** Everything below has been developed and
+> tested on Android. The codebase is cross-platform and nothing in it is
+> Android-specific by design, but **iOS has never been built or run even once** —
+> whether it works is simply unknown. Treat iOS as unverified, not as supported.
+
 ## Features
 
 - **Sign in** with Lidl Plus (OAuth2 PKCE) via an in-app browser, with live sync.
@@ -114,9 +119,17 @@ which regenerate `android/` from scratch.
 
 ### iOS
 
+**Never tested.** No iOS build has ever been produced or run, on a simulator or
+a device, so there is no evidence either way that the app works there. The
+plausible trouble spots — none of them investigated — are the in-WebView
+interception of the `com.lidlplus.app://callback` redirect, the natively
+embedded icon font, and `expo-secure-store` / `expo-sqlite` behaviour under the
+New Architecture.
+
 `eas.json` still carries `development`/`preview`/`production` profiles for
 `npx eas build`; iOS distribution needs an Apple Developer account and is not
-wired into CI.
+wired into CI. Anyone with a Mac and an Apple Developer account can start with
+`npx expo run:ios` — expect to fix things.
 
 ## Settings & data
 
